@@ -2,6 +2,33 @@ import argparse
 
 
 def include_args(parser: argparse.ArgumentParser):
+    '''
+    training args:
+        shuffle_train                   where training set is shuffled
+        batch_size                      batch size
+        lr                              learning rate
+        weight_decay                    a parameter for Adam optimizer
+        lr_gamma                        decay speed for learning rate. only activated when there is 
+                                            a scheduler in training
+        num_epoch                       how many epochs you run the data loader
+        valid_gap                       how often you validate your model during training
+        preview_gap                     how often you dump results in training epochs
+        checkpoint_gap                  how often you checkpoint the model
+        half                            train in float16 instead of float32
+        num_workers                     how many subprocesses used for data loading
+        device                          which device you use, cpu, cuda:0 or cuda:1
+        comment                         discriminate different runs
+        checkpoint                      path to pretrained models when finetuning
+        dump_path                       where you dump your results
+        pathcsi                         where you store your packed CSI data
+        pathmask                        where you store your packed mask labels
+        pathpose                        where you store your packed pose labels
+        testfrac                        percentage of test set
+        trainfrac                       percentage of train set
+        eventlength                     in event-level data separation scheme, how long is the event
+        loadermode                      model data framewise or eventwise. 'eventwise' not implemented yet.
+    '''
+    
     parser.add_argument('--shuffle_train',      default=True, type=bool)
     parser.add_argument('--batch_size',         default=32, type=int)
     parser.add_argument('--lr',                 default=1e-3, type=float)
@@ -11,7 +38,6 @@ def include_args(parser: argparse.ArgumentParser):
     parser.add_argument('--valid_gap',          default=10, type=int)
     parser.add_argument('--preview_gap',        default=100, type=int)
     parser.add_argument('--checkpoint_gap',     default=20, type=int)
-    parser.add_argument('--dump_loss_gap',      default=-1, type=int)
     
     parser.add_argument('--half',               default=False, type=bool)
     parser.add_argument('--num_workers',        default=12, type=int)

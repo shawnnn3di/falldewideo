@@ -204,11 +204,18 @@ def collate_fn(batch):
 
 def build_loader(pathcsi, pathmask, pathpose, eventlength=1, testfrac=0.05, trainfrac=0.8, bs=32, nw=12, mode='framewise'):
     
+    # read the data pack
     dfcsi, dfmask, dfpose = (
         pk.load(open(pathcsi, 'rb')),
         pk.load(open(pathmask, 'rb')),
         pk.load(open(pathpose, 'rb'))
     )
+    
+    '''
+    split train/valid/test dataset, in eventwise or framewise manner. eventlength == 1 is simply
+    frame-level separate scheme. In event-level split scheme, dataset is first sliced into samples
+    of a fixed length. Randomly select the samples, instead of frames.
+    '''
     
     n = len(dfcsi)
     
@@ -229,10 +236,6 @@ def build_loader(pathcsi, pathmask, pathpose, eventlength=1, testfrac=0.05, trai
         trainrows = pd.concat([rows.iloc[_ * eventlength : (_ + 1) * eventlength] for _ in trainsamples['idx']])
         validrows = pd.concat([rows.iloc[_ * eventlength : (_ + 1) * eventlength] for _ in validsamples['idx']])
         
-        # dfcsitest = dfcsi.iloc[testrows]
-        # dfmasktest = dfmask.iloc[testrows]
-        # dfposetest = dfpose.iloc[testrows]
-
     else:
         testrows = rows.iloc[testsamples]
         trainrows = rows.iloc[trainsamples]
