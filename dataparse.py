@@ -126,7 +126,7 @@ class framewise(Dataset):
 
 class eventwise(framewise):
     
-    def __init__(self, dfcsi, dfmask, dfpose, samplelength=10, eventlength=10):
+    def __init__(self, dfcsi, dfmask, dfpose, samplelength=10, eventlength=100):
         
         self.k = self.scidx(40, 4)
         
@@ -202,7 +202,8 @@ def collate_fn(batch):
     return dict(zip(['mask', 'aff', 'kpt', 'csi', 'img', 'name'], [mask, aff, kpt, csi, pic, name]))
 
 
-def build_loader(pathcsi, pathmask, pathpose, eventlength=1, testfrac=0.05, trainfrac=0.8, bs=32, nw=12, mode='framewise'):
+def build_loader(pathcsi, pathmask, pathpose, samplelength=10, eventlength=1, testfrac=0.05, trainfrac=0.8, bs=32,
+                 nw=12, mode='framewise'):
     
     # read the data pack
     dfcsi, dfmask, dfpose = (
@@ -249,11 +250,11 @@ def build_loader(pathcsi, pathmask, pathpose, eventlength=1, testfrac=0.05, trai
     dfmaskvalid = dfmask.iloc[validrows['idx']]
     dfposevalid = dfpose.iloc[validrows['idx']]
     
-    if mode == 'eventwise':
-        trainset = eventwise(dfcsitrain, dfmasktrain, dfposetrain)
-        validset = eventwise(dfcsivalid, dfmaskvalid, dfposevalid)
+    if mode == 'eventlevel':
+        trainset = eventwise(dfcsitrain, dfmasktrain, dfposetrain, samplelength, eventlength)
+        validset = eventwise(dfcsivalid, dfmaskvalid, dfposevalid, samplelength, eventlength)
     
-    elif mode == 'framewise':
+    elif mode == 'framelevel':
         trainset = framewise(dfcsitrain, dfmasktrain, dfposetrain)
         validset = framewise(dfcsivalid, dfmaskvalid, dfposevalid)
     

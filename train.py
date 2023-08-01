@@ -1,6 +1,6 @@
 from utils import include_args
 from dataparse import build_loader
-from models.framewise import build_model
+from models import eventlevel, framelevel
 
 import argparse
 import pickle as pk
@@ -39,10 +39,13 @@ def run():
         dataloader.
     '''
     
-    train_loader, valid_loader = build_loader(args.pathcsi, args.pathmask, args.pathpose, args.eventlength, 
-                                              args.testfrac, args.trainfrac, args.batch_size, args.num_workers, 
-                                              args.loadermode)
-    model, optimizer, scheduler, forward = build_model(args.device, args.checkpoint, args.lr, args.weight_decay)
+    train_loader, valid_loader = build_loader(args.pathcsi, args.pathmask, args.pathpose, args.samplelength,
+                                              args.eventlength, args.testfrac, args.trainfrac, args.batch_size, 
+                                              args.num_workers, args.loadermode)
+    if args.loadermode == 'framelevel':
+        model, optimizer, scheduler, forward = framelevel.build_model(args.device, args.checkpoint, args.lr, args.weight_decay)
+    elif args.loadermode == 'eventlevel':
+        model, optimizer, scheduler, forward = eventlevel.build_model(args.device, args.checkpoint, args.lr, args.weight_decay)
     
     '''
         3.

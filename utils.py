@@ -25,6 +25,7 @@ def include_args(parser: argparse.ArgumentParser):
         pathpose                        where you store your packed pose labels
         testfrac                        percentage of test set
         trainfrac                       percentage of train set
+        samplelength                    how many consecutive frames the model take in at the same time
         eventlength                     in event-level data separation scheme, how long is the event
         loadermode                      model data framewise or eventwise. 'eventwise' not implemented yet.
     '''
@@ -54,8 +55,9 @@ def include_args(parser: argparse.ArgumentParser):
     
     parser.add_argument('--testfrac',           default=0.05, type=float)
     parser.add_argument('--trainfrac',          default=0.80, type=float)
-    parser.add_argument('--eventlength',        default=100, type=float)
+    parser.add_argument('--samplelength',       default=10, type=int)
+    parser.add_argument('--eventlength',        default=100, type=int)
     
-    parser.add_argument('--loadermode',         default='framewise', type=str)
+    parser.add_argument('--loadermode',         default='framelevel', type=str)
     
     return parser

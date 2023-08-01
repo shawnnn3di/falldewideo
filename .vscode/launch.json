@@ -11,6 +11,20 @@
             "program": "train.py",
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        {
+            "name": "train_eventwise",
+            "type": "python",
+            "request": "launch",
+            "program": "train.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--eventlength", "100",
+                "--samplelength", "10",
+                "--loadermode", "eventlevel",
+                "--batch_size", "4",
+            ]
         }
     ]
 }
