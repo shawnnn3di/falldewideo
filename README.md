@@ -6,5 +6,4 @@
 
 ### current progress and to do list
 
-1. Support only 'framewise' now. Add 'eventwise'.
-2. Load only one data pack now. Able the scripts to load from different packs.
+1. Load only one data pack now. Able the scripts to load from different packs.
