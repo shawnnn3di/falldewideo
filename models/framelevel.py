@@ -4,7 +4,7 @@ from torchvision.transforms import Resize
 from torch.optim import Adam, lr_scheduler
 
 
-resizer = Resize((64, 32))
+resizer = Resize((64, 32), antialias=None)
 def forward_func(batch, device, model, half, resizer=resizer):
         
     x = batch['csi'].to(device)

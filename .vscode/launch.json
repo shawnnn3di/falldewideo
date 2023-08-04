@@ -21,6 +21,19 @@
             "justMyCode": true
         },
         {
+            "name": "train_full",
+            "type": "python",
+            "request": "launch",
+            "program": "train_full.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--pathcsi", "annotate/csi/data/full", 
+                "--pathmask", "annotate/maskrcnn/data/full", 
+                "--pathpose", "annotate/openpose/data/full"
+            ]
+        },
+        {
             "name": "train_eventwise",
             "type": "python",
             "request": "launch",

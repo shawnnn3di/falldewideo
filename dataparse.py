@@ -204,7 +204,7 @@ def collate_fn(batch):
 
 
 def build_loader(pathcsi, pathmask, pathpose, samplelength=10, eventlength=1, testfrac=0.05, trainfrac=0.8, bs=32,
-                 nw=12, mode='framewise'):
+                 nw=12, mode='framewise', randomidx=None):
     
     # read the data pack
     dfcsi, dfmask, dfpose = (
@@ -223,8 +223,10 @@ def build_loader(pathcsi, pathmask, pathpose, samplelength=10, eventlength=1, te
     
     rows = pd.DataFrame({'idx': range(n)})
     
-    random.seed(42)
-    samples = pd.DataFrame({'idx': list(range(int(n / eventlength)))}).sample(frac=1.0)
+    if randomidx is None:
+        samples = pd.DataFrame({'idx': list(range(int(n / eventlength)))}).sample(frac=1.0)
+    else:
+        samples = pd.DataFrame({'idx': list(range(int(n / eventlength)))}).iloc[randomidx]
     ns = len(samples)
     
     splits = [int(testfrac * ns), int((testfrac + trainfrac) * ns)]

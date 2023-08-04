@@ -48,6 +48,7 @@ def include_args(parser: argparse.ArgumentParser):
     
     parser.add_argument('--checkpoint',         default=None, type=str)
     parser.add_argument('--dump_path',          default='dump', type=str)
+    parser.add_argument('--traindumpgap',       default=999, type=int)
     
     parser.add_argument('--pathcsi',            default='annotate/csi/data/lxh.pk', type=str)
     parser.add_argument('--pathmask',           default='annotate/maskrcnn/data/lxh.pk', type=str)
@@ -55,7 +56,7 @@ def include_args(parser: argparse.ArgumentParser):
     
     parser.add_argument('--testfrac',           default=0.05, type=float)
     parser.add_argument('--trainfrac',          default=0.80, type=float)
-    parser.add_argument('--samplelength',       default=10, type=int)
+    parser.add_argument('--samplelength',       default=1, type=int)
     parser.add_argument('--eventlength',        default=100, type=int)
     
     parser.add_argument('--loadermode',         default='framelevel', type=str)

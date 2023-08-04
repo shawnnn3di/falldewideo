@@ -102,7 +102,7 @@ def run():
                         y_paf.detach().cpu().numpy(), 
                         sm.detach().cpu().numpy(), 
                         y_sm.detach().cpu().numpy(),
-                        batch['name']], open('%s/train_%s_%d_%d.pk' % (args.dumpdir, args.comment, epoch, idx), 'wb'))
+                        batch['name']], open('%s/train_%s_%d_%d.pk' % (args.dump_path, args.comment, epoch, idx), 'wb'))
 
             
 if __name__ == '__main__':

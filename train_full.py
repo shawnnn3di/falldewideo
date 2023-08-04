@@ -3,6 +3,7 @@ from dataparse import build_loader
 from models import eventlevel, framelevel
 
 import argparse
+import pandas as pd
 import pickle as pk
 import random
 import torch
@@ -39,7 +40,6 @@ def run():
         in a new file in model/, and import yours instead of the exsiting one. Similarly for a different dataset or 
         dataloader.
     '''
-    
     if args.loadermode == 'framelevel':
         model, optimizer, scheduler, forward = framelevel.build_model(args.device, args.checkpoint, args.lr, 
                                                                       args.weight_decay)
@@ -56,16 +56,17 @@ def run():
         "batch", put the digested "batch" into the model, and return the model's outputs. If it is a valid epoch, then 
         output will be dumped, if it is the right epoch to do so.
     '''
+    randomidx = pd.DataFrame.from_dict({'idx': list(range(int(4020 / args.eventlength)))}).sample(frac=1.0)
     for epoch in range(args.num_epoch):
         
-        ipack = random.randint(0, 10)
+        ipack = random.randint(0, 9)
         
         print('pack %d in enumeration.' % ipack)
         
         train_loader, valid_loader = build_loader(args.pathcsi + '_%d.pk' % ipack, args.pathmask + '_%d.pk' % ipack, 
                                                   args.pathpose + '_%d.pk' % ipack, args.samplelength,
                                                   args.eventlength, args.testfrac, args.trainfrac, args.batch_size, 
-                                                  args.num_workers, args.loadermode)
+                                                  args.num_workers, args.loadermode, randomidx['idx'])
         if epoch % args.valid_gap == 0:
             with torch.no_grad():
                 pbar = tqdm.tqdm(enumerate(valid_loader), total=len(valid_loader))
@@ -114,7 +115,7 @@ def run():
                         y_paf.detach().cpu().numpy(), 
                         sm.detach().cpu().numpy(), 
                         y_sm.detach().cpu().numpy(),
-                        batch['name']], open('%s/train_p%d_%s_%d_%d.pk' % (args.dumpdir, ipack, args.comment, epoch, 
+                        batch['name']], open('%s/train_p%d_%s_%d_%d.pk' % (args.dump_path, ipack, args.comment, epoch, 
                                                                            idx), 'wb'))
 
             
