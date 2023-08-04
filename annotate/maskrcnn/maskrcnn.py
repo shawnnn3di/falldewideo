@@ -1,8 +1,9 @@
 # %%
 # lookto = '/home/lscsc/caizhijie/0420-wamera-benchmark/annotate_29/3c.pk'
-lookto = '/home/lscsc/caizhijie/0710-falldewideo/123c.pk'
+lookto = '/home/sensing/caizhijie/0731-wamera-benchmark/falldewideo/annotate/csi/data/full.pk'
 
 import pickle as pk
+import pandas as pd
 
 df = pk.load(open(lookto, 'rb'))
 
@@ -32,7 +33,7 @@ import os
 
 import sys
 
-sys.path.insert(0, '/home/lscsc/caizhijie/0710-falldewideo/external')
+sys.path.insert(0, 'external')
 
 import detectron2
 
@@ -43,20 +44,19 @@ from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog, DatasetCatalog
 
 # os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+print('setting cuda devices..')
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 
+print('waking up detectron2...')
 cfg = get_cfg()
-# add project-specific config (e.g., TensorMask) here if you're not running a model in detectron2's core library
 
-yamlfile = '/home/lscsc/caizhijie/0420-wamera-benchmark/annotate/maskrcnn/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_C4_1x.yaml'
-# yamlfile = 'configs/COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml'
-# yamlfile = '/home/lscsc/caizhijie/0420-wamera-benchmark/annotate/maskrcnn/configs/COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml'
+yamlfile = 'external/detectron2/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_C4_1x.yaml'
 
 cfg.merge_from_file(yamlfile)
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
 # Find a model from detectron2's model zoo. You can use the https://dl.fbaipublicfiles... url as well
 # cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(yamlfile[11:])
-cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(yamlfile[70:])
+cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(yamlfile[28:])
 # cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(yamlfile)
 
 # %%
@@ -72,7 +72,7 @@ class _dataset(Dataset):
         self.df = df
         
     def __getitem__(self, index):
-        return self.df.iloc[index]['pic'].replace('sensing', 'lscsc').replace('0702-falldewideo', '0420-wamera-benchmark').replace('data_unzip', 'data')
+        return self.df.iloc[index]['pic']
     
     def __len__(self):
         return len(self.df)
@@ -111,10 +111,11 @@ class packPredictor(DefaultPredictor):
             return predictions
 
 # %%
-n = 1
+n = 10
 
 for k in range(n):
 
+    print('building %d/%d loader for inference..' % (k, n))
     dataset = _dataset(df[k * int(len(df) / n) : (k+1) * (int(len(df) / n))])
     inference_loader = DataLoader(dataset, 4, shuffle=False, collate_fn=collate_fn, num_workers=4, pin_memory=True)
     ppredictor = packPredictor(cfg)
@@ -134,7 +135,7 @@ for k in range(n):
     
     df_ = df[k * int(len(df) / n) : (k+1) * (int(len(df) / n))]
     df_['maskrcnn'] = outputlist
-    pk.dump(df_[['maskrcnn', 'pic']], open('/home/lscsc/caizhijie/0710-falldewideo/annotate/maskrcnn/data/3c_%d.pk' % k, 'wb'))
+    pk.dump(df_[['maskrcnn', 'pic']], open('annotate/maskrcnn/data/full_%d.pk' % k, 'wb'))
 
 # %%
 

@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "maskrcnn",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/sensing/caizhijie/0731-wamera-benchmark/falldewideo/annotate/maskrcnn/maskrcnn.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "train",
             "type": "python",
             "request": "launch",
@@ -20,10 +28,14 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "--eventlength", "100",
-                "--samplelength", "10",
-                "--loadermode", "eventlevel",
-                "--batch_size", "4",
+                "--eventlength",
+                "100",
+                "--samplelength",
+                "10",
+                "--loadermode",
+                "eventlevel",
+                "--batch_size",
+                "4",
             ]
         }
     ]

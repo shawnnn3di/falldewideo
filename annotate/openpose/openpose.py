@@ -1,8 +1,8 @@
 # %%
-# lookto = '/home/lscsc/caizhijie/0420-wamera-benchmark/annotate_29/3c.pk'
-lookto = '/home/lscsc/caizhijie/0710-falldewideo/123c.pk'
+lookto = 'annotate/csi/data/full.pk'
 
 import pickle as pk
+import pandas as pd
 from torchvision.transforms import Resize
 
 df = pk.load(open(lookto, 'rb'))
@@ -12,7 +12,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 # %%
-openposepath = '/home/lscsc/caizhijie/0710-falldewideo/external/pytorch-openpose'
+openposepath = 'external/pytorch-openpose'
 
 import sys
 sys.path.append(openposepath)
@@ -86,7 +86,7 @@ class _dataset(Dataset):
         self.df = df
         
     def __getitem__(self, index):
-        return self.df.iloc[index]['pic'].replace('sensing', 'lscsc').replace('0702-falldewideo', '0420-wamera-benchmark').replace('data_unzip', 'data')
+        return self.df.iloc[index]['pic']
     
     def __len__(self):
         return len(self.df)
@@ -99,9 +99,11 @@ def collate_fn(batch):
 
 from src.model import bodypose_model
 
+print('setting cuda devices..')
 gpuid = 1
 device = 'cuda:%d' % gpuid
 
+print('waking up openpose...')
 model_path = openposepath + '/model/body_pose_model.pth'
 teacher = bodypose_model()
 model_dict = util.transfer(teacher, torch.load(model_path))
@@ -156,7 +158,7 @@ colors[18] = np.array([0, 0, 0])
 # %%
 import torch.nn.functional as F
 
-n = 1
+n = 10
 resizer = Resize((720, 1280))
 
 for k in range(n):
@@ -181,7 +183,7 @@ for k in range(n):
     df_['kpt'] = kptlist
     df_['aff'] = afflist
     
-    pk.dump(df_[['kpt', 'aff', 'pic']], open('/home/lscsc/caizhijie/0710-falldewideo/annotate/openpose/data/3c_%d.pk' % k, 'wb'))
+    pk.dump(df_[['kpt', 'aff', 'pic']], open('annotate/openpose/data/full_%d.pk' % k, 'wb'))
 
 # %%
 
