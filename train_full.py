@@ -104,10 +104,10 @@ def run():
             pbar.set_description('%s, epoch: %d/%d, batch: %d/%d, loss: %.4f, %.4f. %.4f' % (
                 'train', epoch, args.num_epoch, idx, lenpbar, loss_sm, loss_jhm, loss_paf))
             
-            if epoch % args.valid_gap:
+            if epoch % args.valid_gap == 0:
                 torch.save(model, '%s/%s_%d.model' % (args.dump_path, args.comment, epoch))
             
-                if idx % args.traindumpgap:
+                if idx % args.traindumpgap == 0:
                     pk.dump([
                         jhm.detach().cpu().numpy(), 
                         y_jhm.detach().cpu().numpy(), 

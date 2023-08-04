@@ -36,7 +36,7 @@ def include_args(parser: argparse.ArgumentParser):
     parser.add_argument('--weight_decay',       default=1e-5, type=float)
     parser.add_argument('--lr_gamma',           default=0.99, type=float)
     parser.add_argument('--num_epoch',          default=300, type=int)
-    parser.add_argument('--valid_gap',          default=10, type=int)
+    parser.add_argument('--valid_gap',          default=20, type=int)
     parser.add_argument('--preview_gap',        default=100, type=int)
     parser.add_argument('--checkpoint_gap',     default=20, type=int)
     
