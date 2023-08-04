@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pickle as pk
+import random
 import torch
 
 from torch.utils.data import Dataset, DataLoader
@@ -222,6 +223,7 @@ def build_loader(pathcsi, pathmask, pathpose, samplelength=10, eventlength=1, te
     
     rows = pd.DataFrame({'idx': range(n)})
     
+    random.seed(42)
     samples = pd.DataFrame({'idx': list(range(int(n / eventlength)))}).sample(frac=1.0)
     ns = len(samples)
     
