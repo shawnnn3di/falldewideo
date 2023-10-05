@@ -16,6 +16,6 @@
 
 ### Dataset is available in:
 
-BaiduYun:   https://pan.baidu.com/s/1zTAsQUIbvNPvESXZ7Hu22w?pwd=osrf 
+0. BaiduYun:   https://pan.baidu.com/s/1zTAsQUIbvNPvESXZ7Hu22w?pwd=osrf 
 
-Mega:       https://mega.nz/folder/l6cgwbgQ#dFSRER1vkXobu-uaXOam5g (partially)
+1. Mega:       https://mega.nz/folder/l6cgwbgQ#dFSRER1vkXobu-uaXOam5g (partially)
